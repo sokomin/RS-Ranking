@@ -1,9 +1,9 @@
 name: Build site on schedule or main branch update
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   schedule:
     # Adjust refresh schedule here. By default, it runs once per day.
     # Syntax reference: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
@@ -42,6 +42,6 @@ jobs:
           git config --local user.name "sokomin"
           git config pull.rebase false
           git add .
-          git commit -m "Add ranking data." -a
+          git diff --exit-code || git commit -m "Add ranking data." -a
           git pull
           git push origin main
