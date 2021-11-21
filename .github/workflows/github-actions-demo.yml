@@ -30,7 +30,7 @@ jobs:
 
       - name: Run  ranking_lv_jpn.py # Pythonファイルの実行
         run: |
-          python ranking_lv_jpn.py
+          python ranking_detect_korea.py
 
       - name: Commit and Push # 実行した結果をプッシュして変更をレポジトリに反映
         run: |
