@@ -8,12 +8,13 @@ import os
 now = datetime.datetime.now()
 today_str = now.strftime("%Y%m%d")
 Path('out/jpn_lv/').mkdir(parents=True, exist_ok=True)
+headers_dic = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36"}
 
 server_num = [1,3,5]
 server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead"]
 
-job_num = [0,1,2,3,4,5,6,7,8,9,10,20,22]
-# job_num = [9] #デバッグ用、普段はコメントアウト
+# job_num = [0,1,2,3,4,5,6,7,8,9,10,20,22]
+job_num = [9] #デバッグ用、普段はコメントアウト
 
 for jn in job_num:
     print("job number:" + str(jn))
@@ -24,7 +25,7 @@ for jn in job_num:
 
         for pg in range(1,11):
             url = 'https://members.redsonline.jp/game_info/community/ranking/ranking.asp?page='+ str(pg) +'&world=' +str(sn) +'&job=' +str(jn) +'&Page_Size=100'
-            response = requests.get(url)
+            response = requests.get(url, headers=headers_dic)
             # print(response.raise_for_status())
             html_ranking = response.content
             soup = BeautifulSoup(html_ranking, 'html.parser', from_encoding="shift-jis")
