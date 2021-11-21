@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from pathlib import Path
 import datetime
+import os
 
 now = datetime.datetime.now()
 today_str = now.strftime("%Y%m%d")
@@ -55,7 +56,7 @@ for dr in range(0,6):
         # gitのcommitlog辿れば過去のデータ手に入るしいいよね理論
         last_year_str = str((now + datetime.timedelta(days=-367)).strftime("%Y%m%d"))
         tl_server = str(last_year_str) + '_' + str(sn)
-        last_year_file = 'out/jpn_lv/'  + tl_server + ".csv"
+        last_year_file = 'out/korea_detective/'  + tl_server + ".csv"
         print("delete:" + str(last_year_file))
         if os.path.exists(last_year_file):
             os.remove(last_year_file)
