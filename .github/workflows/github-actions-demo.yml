@@ -33,6 +33,8 @@ jobs:
           python ranking_detect_korea.py
       - name: git setting
         run: |
+          git config --global user.email "sokomincontact@gmail.com"
+          git config --global user.name "sokomin"
           git config --local user.email "sokomincontact@gmail.com"
           git config --local user.name "sokomin"
       - name: Commit files

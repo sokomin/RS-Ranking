@@ -8,7 +8,19 @@ import os
 now = datetime.datetime.now()
 today_str = now.strftime("%Y%m%d")
 Path('out/jpn_lv/').mkdir(parents=True, exist_ok=True)
-headers_dic = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36"}
+# どれかが必要だけど、わからん
+headers_dic = {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", 
+    "Accept-Encoding": "gzip, deflate, br", 
+    "Accept-Language": "ja-JP,ja;q=0.9,en-UM;q=0.8,en;q=0.7,en-US;q=0.6,zh-TW;q=0.5,zh;q=0.4", 
+    "Host": "httpbin.org", 
+    "Sec-Ch-Ua": "' Not A;Brand';v='99', 'Chromium';v='96', 'Google Chrome';v='96'", 
+    "Sec-Ch-Ua-Platform": "'Windows'", 
+    "Sec-Fetch-Dest": "document", 
+    "Sec-Fetch-Mode": "navigate", 
+    "Sec-Fetch-Site": "none", 
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",
+}
 
 server_num = [1,3,5]
 server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead"]
