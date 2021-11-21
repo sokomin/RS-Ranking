@@ -1,7 +1,13 @@
-name: ActionsTest # GitHub Actionsにつける名前。任意で良い。
+name: Build site on schedule or main branch update
 
 on:
+  push:
+    branches:
+      - main
   schedule:
+    # Adjust refresh schedule here. By default, it runs once per day.
+    # Syntax reference: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
+    # Recommended tool: https://crontab.guru/
     - cron: '0 5,6 * * *' # cronで定期実行
 
 jobs:
@@ -14,7 +20,7 @@ jobs:
         uses: actions/setup-python@v2 # Pythonのセットアップ
         with:
           python-version: "3.8" # Pythonのバージョン指定
-
+          architecture: x64
       - name: Install dependencies # Pythonの依存環境のインストール
         run: | #このような書き方で複数行を一気に実行することができる。
           python -m pip install --upgrade pip
