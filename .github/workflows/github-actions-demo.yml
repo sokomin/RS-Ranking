@@ -1,17 +1,36 @@
-name: GitHub Actions Demo
-on: [push]
+name: ActionsTest # GitHub Actionsにつける名前。任意で良い。
+
+on:
+  schedule:
+    - cron: '0 5,6 * * *' # cronで定期実行
+
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest # 最新のubuntu環境で下記のジョブを実行
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - uses: actions/checkout@v2 # おまじない
+
+      - name: Setup python # ワークフローのセクションごとに設定する名前。特に設定する必要はないが、どこでエラーが起きているかを把握する為にも設定しておいた方が良い。
+        uses: actions/setup-python@v2 # Pythonのセットアップ
+        with:
+          python-version: "3.8" # Pythonのバージョン指定
+
+      - name: Install dependencies # Pythonの依存環境のインストール
+        run: | #このような書き方で複数行を一気に実行することができる。
+          python -m pip install --upgrade pip
+          pip install pandas
+          pip install beautifulsoup4
+          pip install requests
+
+      - name: Run main.py # Pythonファイルの実行
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          python ranking_lv_jpn.py
+
+      - name: Commit and Push # 実行した結果をプッシュして変更をレポジトリに反映
+        run: |
+          git config user.name "sokomin"
+          git config user.email "sokomin@bot"
+          git add .
+          git commit -m "Commit Message"
+          git pull
+          git push origin master
