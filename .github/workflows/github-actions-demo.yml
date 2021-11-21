@@ -37,8 +37,7 @@ jobs:
           git config --global user.name "sokomin"
           git config --local user.email "sokomincontact@gmail.com"
           git config --local user.name "sokomin"
-      - name: Commit files
-        run: |
+          git config pull.rebase false
           git add .
           git commit -m "Add ranking data." -a
           git pull
