@@ -28,15 +28,11 @@ jobs:
           pip install beautifulsoup4
           pip install requests
 
-      - name: Run  ranking_lv_jpn.py # Pythonファイルの実行
+      - name: Run  ranking_detect_korea.py # 韓国ランキング
         run: |
           python ranking_detect_korea.py
-
-      - name: Commit and Push # 実行した結果をプッシュして変更をレポジトリに反映
-        run: |
-          git config user.name "sokomin"
-          git config user.email "sokomin@bot"
-          git add .
-          git commit -m "Commit Message"
-          git pull
-          git push origin master
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
