@@ -54,7 +54,7 @@ for dr in range(0,6):
         # ファイル量多くなるとGitHubから怒られるので1年以上前のファイルは削除
         # gitのcommitlog辿れば過去のデータ手に入るしいいよね理論
         last_year_str = str((now + datetime.timedelta(days=-367)).strftime("%Y%m%d"))
-        tl_server = str(last_year_str) + '_' + st(sn)
+        tl_server = str(last_year_str) + '_' + str(sn)
         last_year_file = 'out/jpn_lv/'  + tl_server + ".csv"
         print("delete:" + str(last_year_file))
         if os.path.exists(last_year_file):
