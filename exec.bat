@@ -1,8 +1,8 @@
 @echo off
 git pull origin main
 
-rem "python ranking_lv_jpn.py"
-rem "python ranking_gh_jpn.py"
+python ranking_lv_jpn.py
+python ranking_gh_jpn.py
 
 git add out/jpn_lv/*.csv
 git add out/jpn_gh/*.csv
