@@ -1,0 +1,42 @@
+name: Build site on schedule or main branch update
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Adjust refresh schedule here. By default, it runs once per day.
+    # Syntax reference: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
+    # Recommended tool: https://crontab.guru/
+    - cron: '0 5,6 * * *' # cronで定期実行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 最新のubuntu環境で下記のジョブを実行
+    steps:
+      - uses: actions/checkout@v2 # おまじない
+
+      - name: Setup python # ワークフローのセクションごとに設定する名前。特に設定する必要はないが、どこでエラーが起きているかを把握する為にも設定しておいた方が良い。
+        uses: actions/setup-python@v2 # Pythonのセットアップ
+        with:
+          python-version: "3.8" # Pythonのバージョン指定
+          architecture: x64
+      - name: Install dependencies # Pythonの依存環境のインストール
+        run: | #このような書き方で複数行を一気に実行することができる。
+          python -m pip install --upgrade pip
+          pip install pandas
+          pip install beautifulsoup4
+          pip install requests
+
+      - name: Run  ranking_lv_jpn.py # Pythonファイルの実行
+        run: |
+          python ranking_lv_jpn.py
+
+      - name: Commit and Push # 実行した結果をプッシュして変更をレポジトリに反映
+        run: |
+          git config user.name "sokomin"
+          git config user.email "sokomin@bot"
+          git add .
+          git commit -m "Commit Message"
+          git pull
+          git push origin master
