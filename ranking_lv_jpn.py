@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 from pathlib import Path
 import datetime
 import os
+import time
 
 now = datetime.datetime.now()
 today_str = now.strftime("%Y%m%d")
@@ -21,12 +22,13 @@ headers_dic = {
     "Sec-Fetch-Site": "none", 
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",
 }
+headers_dic = {}
 
 server_num = [1,3,5]
 server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead"]
 
-# job_num = [0,1,2,3,4,5,6,7,8,9,10,20,22]
-job_num = [9] #デバッグ用、普段はコメントアウト
+job_num = [0,1,2,3,4,5,6,7,8,9,10,20,22]
+# job_num = [9] #デバッグ用、普段はコメントアウト
 
 for jn in job_num:
     print("job number:" + str(jn))
@@ -74,3 +76,4 @@ for jn in job_num:
         print("delete:" + str(last_year_file))
         if os.path.exists(last_year_file):
             os.remove(last_year_file)
+time.sleep(5.0)
