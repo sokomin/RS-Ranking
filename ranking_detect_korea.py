@@ -6,8 +6,6 @@ import datetime
 
 now = datetime.datetime.now()
 today_str = now.strftime("%Y%m%d")
-
-
 Path('out/korea_detective/').mkdir(parents=True, exist_ok=True)
 
 # 6日分はさかのぼれそう。毎日実行しても動くようにはなっている
@@ -52,3 +50,12 @@ for dr in range(0,6):
             for r in mat:
                 f.write(','.join(r))
                 f.write('\n')
+
+        # ファイル量多くなるとGitHubから怒られるので1年以上前のファイルは削除
+        # gitのcommitlog辿れば過去のデータ手に入るしいいよね理論
+        last_year_str = str((now + datetime.timedelta(days=-367)).strftime("%Y%m%d"))
+        tl_server = str(last_year_str) + '_' + st(sn)
+        last_year_file = 'out/jpn_lv/'  + tl_server + ".csv"
+        print("delete:" + str(last_year_file))
+        if os.path.exists(last_year_file):
+            os.remove(last_year_file)

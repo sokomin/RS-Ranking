@@ -28,12 +28,12 @@ jobs:
           pip install beautifulsoup4
           pip install requests
 
-     # - name: Run  ranking_detect_korea.py # 韓国ランキング
-     #   run: |
-     #     python ranking_detect_korea.py
-      - name: Run ranking_lv_jpn.py # 韓国ランキング
+      - name: Run ranking_detect_korea.py # 韓国ランキング
         run: |
-          python ranking_lv_jpn.py
+          python ranking_detect_korea.py
+      # - name: Run ranking_lv_jpn.py # 日本ランキング
+      #   run: |
+      #     python ranking_lv_jpn.py
       - name: git setting
         run: |
           git config --global user.email "sokomincontact@gmail.com"
