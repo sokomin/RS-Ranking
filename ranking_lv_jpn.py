@@ -8,7 +8,7 @@ import os
 now = datetime.datetime.now()
 today_str = now.strftime("%Y%m%d")
 Path('out/jpn_lv/').mkdir(parents=True, exist_ok=True)
-# どれかが必要だけど、わからん
+# どれかが必要だけど、わからん。proxy必要だったら詰む
 headers_dic = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", 
     "Accept-Encoding": "gzip, deflate, br", 
