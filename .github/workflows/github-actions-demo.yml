@@ -31,8 +31,13 @@ jobs:
       - name: Run  ranking_detect_korea.py # 韓国ランキング
         run: |
           python ranking_detect_korea.py
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+      - name: git setting
+        run: |
+          git config --local user.email "sokomincontact@gmail.com"
+          git config --local user.name "sokomin"
+      - name: Commit files
+        run: |
+          git add .
+          git commit -m "Add ranking data." -a
+          git pull
+          git push origin master
