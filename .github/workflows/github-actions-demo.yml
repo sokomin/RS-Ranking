@@ -35,14 +35,14 @@ jobs:
       # - name: Run ranking_lv_jpn.py # 日本ランキング
       #   run: |
       #     python ranking_lv_jpn.py
-      - name: git setting
+      - name: commit & push
         run: |
-          git config --global user.email "sokomincontact@gmail.com"
-          git config --global user.name "sokomin"
-          git config --local user.email "sokomincontact@gmail.com"
-          git config --local user.name "sokomin"
-          git config pull.rebase false
-          git diff --exit-code || git add .
-          git diff --exit-code || git commit -m "Add ranking data." -a
-          git diff --exit-code || git pull
-          git diff --exit-code || git push origin main
+          git add -N . # 新規ファイルを含める
+          if ! git diff --exit-code --quiet
+          then
+            git config user.name github-actions
+            git config user.email github-actions@github.com
+            git add .
+            git commit -m "Update"
+            git push
+          fi
