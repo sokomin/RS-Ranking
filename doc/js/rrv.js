@@ -90,15 +90,38 @@ function calc1() {
 
     var a1 = $('input[name="a1"]').val();
     var a2 = $('input[name="a2"]').val();
+    var dt = new Date();
+    dt.setFullYear(dt.getFullYear() - 1);
     var date_a1 = getNowYMDStr(a1);
     var date_a2 = getNowYMDStr(a2);
-
+    // a2を空にするとa1の日付のランキングがみられる
+    if(!a2){
+        date_a2 = date_a1
+    }
+    // 1年以上前は取り出し禁止
+    var dy = new Date(2021,11,20);
     var sn = $('select[name="world"]').val() ? Number($('select[name="world"]').val()) : 0;
     var jn = $('select[name="job"]').val() ? Number($('select[name="job"]').val()) : 0;
+
+    var d1t = new Date(a1).getTime()
+    var d2t = new Date(a2).getTime()
+    var dtt = new Date(dt).getTime()
+    var dyt = new Date(dy).getTime()
+    if(d1t < dtt || d2t < dtt){
+        alert("日付が古すぎます");
+        return;
+    } else if(d1t < dyt || d2t < dyt){
+        if(jn != 0){
+            alert("指定された日付の各職ランキングは取り出し不可");
+            return;
+        }
+    }
+
+
     if(date_a1 && date_a2){
         getCSV(date_a1, date_a2,sn, jn);
     } else {
-        alert("日付入力ミス");
+        alert("日付入力フォーマットエラー");
     }
 }
 
