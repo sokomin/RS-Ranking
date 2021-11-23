@@ -12,7 +12,7 @@ const_dir = 'out/jpn_gh/'
 Path(const_dir).mkdir(parents=True, exist_ok=True)
 server_num = [1,3,5]
 server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead"]
-job_num = [1,3]
+job_num = [5,1,3]
 
 for sn in server_num:
     print("server:" + str(server_name[sn]))
@@ -22,6 +22,12 @@ for sn in server_num:
         r = []
 
         url = 'https://members.redsonline.jp/game_info/community/ranking/guild.asp?act=search&world=' +str(sn) +'&guildhallrank=' +str(jn)
+        if jn == 5:
+            url = 'https://members.redsonline.jp/game_info/community/ranking/guild.asp'
+            # 3鯖分のGH5が重複生成されないように対処
+            # TODO 金鯖ある期間これで動くか？
+            if sn != 1:
+                continue
         response = requests.get(url)
         html_ranking = response.content
         soup = BeautifulSoup(html_ranking, 'html.parser', from_encoding="shift-jis")
