@@ -227,6 +227,8 @@ function calc1() {
 function createTable() {
     var $div_main = $('<div>');
     var cnt = 0; //セーフティをはっておく
+    var pwar_ptsum = 0;
+    var pwar_ptcnt = 0;
 
     var $table = $('<table>').attr("id", "table14").css("text-align", "center")
         .append($("<colgroup>").append($("<col>").attr("span", 1).attr("width", 80))
@@ -264,10 +266,14 @@ function createTable() {
             } else if (diff_rank < 0){
                 diff += ' <font color="blue">Rank↓</font>';
             }
-
         } else {
-            // 新規登録？
+            // 新規ギルドとして扱う
             diff += ' <font color="red">新規</font>';
+        }
+        // 集計用
+        if(data.pwar_pt > 9645000){
+            pwar_ptsum+= Number(data.pwar_pt);
+            pwar_ptcnt++;
         }
 
         var $rp = $('<tr>');//{ 0: "rank", 1: "img", 2: "guild_name", 3: "gm_name", 4: "pwar_pt", 5: "gh_rank" };
@@ -277,6 +283,8 @@ function createTable() {
         cnt++;
     }
 
+    var average_pt = pwar_ptcnt > 0 ? parseInt(pwar_ptsum / pwar_ptcnt) : "データ無し";
+    $div_main.append("完遂時の平均P戦ポイント：" + average_pt + "<br><br>");
     $div_main.append($table);
     $div_main.append("<br><br>");
 
