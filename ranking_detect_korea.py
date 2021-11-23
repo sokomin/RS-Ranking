@@ -5,7 +5,8 @@ from pathlib import Path
 import datetime
 import os
 
-now = datetime.datetime.now()
+# GitHubではtimezoneがUTC指定。
+now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
 today_str = now.strftime("%Y%m%d")
 Path('out/korea_detective/').mkdir(parents=True, exist_ok=True)
 

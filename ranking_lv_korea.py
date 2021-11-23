@@ -5,7 +5,7 @@ from pathlib import Path
 import datetime
 import os
 
-now = datetime.datetime.now()
+now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
 today_str = now.strftime("%Y%m%d")
 Path('out/korea_lv/').mkdir(parents=True, exist_ok=True)
 
