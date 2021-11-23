@@ -83,7 +83,7 @@ function convertCSVtoArray(csv_data) {// 読み込んだCSVデータが文字列
     }
     console.log(rank_comp);
 
-    createQuestTable();
+    createTable();
 }
 
 function calc1() {
@@ -99,7 +99,7 @@ function calc1() {
         date_a2 = date_a1
     }
     // 1年以上前は取り出し禁止
-    var dy = new Date(2021,11,20);
+    var dy = new Date(2021,10,20);
     var sn = $('select[name="world"]').val() ? Number($('select[name="world"]').val()) : 0;
     var jn = $('select[name="job"]').val() ? Number($('select[name="job"]').val()) : 0;
 
@@ -126,7 +126,7 @@ function calc1() {
 }
 
 
-function createQuestTable() {
+function createTable() {
     var $div_main = $('<div>');
     var cnt = 0; //セーフティをはっておく
 
