@@ -1,9 +1,9 @@
 name: Build site on schedule or main branch update
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   schedule:
     # Adjust refresh schedule here. By default, it runs once per day.
     # Syntax reference: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#schedule
@@ -15,7 +15,9 @@ jobs:
     runs-on: ubuntu-latest # 最新のubuntu環境で下記のジョブを実行
     steps:
       - uses: actions/checkout@v2 # おまじない
-
+      - name: Open Docker
+        run: |
+          docker run --rm -it --cap-add=NET_ADMIN --device=/dev/net/tun --dns=1.1.1.1 --dns=8.8.8.8 --dns=9.9.9.9 -p 8118:8118 tantantanuki/ja-vpngate-proxy
       - name: Setup python
         uses: actions/setup-python@v2 # Pythonのセットアップ
         with:
