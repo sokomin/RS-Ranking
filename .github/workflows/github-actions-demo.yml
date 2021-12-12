@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2 # おまじない
       - name: Open Docker
         run: |
-          docker run --rm -it --cap-add=NET_ADMIN --device=/dev/net/tun --dns=1.1.1.1 --dns=8.8.8.8 --dns=9.9.9.9 -p 8118:8118 tantantanuki/ja-vpngate-proxy
+          docker run --rm --cap-add=NET_ADMIN --device=/dev/net/tun --dns=1.1.1.1 --dns=8.8.8.8 --dns=9.9.9.9 -p 8118:8118 tantantanuki/ja-vpngate-proxy
       - name: Setup python
         uses: actions/setup-python@v2 # Pythonのセットアップ
         with:
