@@ -27,7 +27,7 @@ headers_dic = {}
 server_num = [1,3,5]
 server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead"]
 
-job_num = [0,1,2,3,4,5,6,7,8,9,10,20,22]
+job_num = [0,1,2,3,4,5,6,7,8,9,10,20,22,24]
 # job_num = [9] #デバッグ用、普段はコメントアウト
 
 for jn in job_num:

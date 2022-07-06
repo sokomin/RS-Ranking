@@ -10,4 +10,4 @@ git commit -m "[auto commit]daily japan ranking updated."
 
 rem "pushだけはすると事故る"
 rem "git push origin main"
-
+git push origin main
