@@ -10,8 +10,8 @@ now = datetime.datetime.now()
 today_str = now.strftime("%Y%m%d")
 const_dir = 'out/jpn_gh/'
 Path(const_dir).mkdir(parents=True, exist_ok=True)
-server_num = [1,3,5]
-server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead"]
+server_num = [1,3,5,7]
+server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead","g","gold"]
 job_num = [5,1,3]
 
 for sn in server_num:
@@ -21,7 +21,10 @@ for sn in server_num:
         mat = []
         r = []
 
-        url = 'https://members.redsonline.jp/game_info/community/ranking/guild.asp?act=search&world=' +str(sn) +'&guildhallrank=' +str(jn)
+        surl = sn
+        if sn == 7:
+            surl = 25
+        url = 'https://members.redsonline.jp/game_info/community/ranking/guild.asp?act=search&world=' +str(surl) +'&guildhallrank=' +str(jn)
         if jn == 5:
             url = 'https://members.redsonline.jp/game_info/community/ranking/guild.asp'
             # 3鯖分のGH5が重複生成されないように対処

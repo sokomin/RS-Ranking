@@ -24,8 +24,8 @@ headers_dic = {
 }
 headers_dic = {}
 
-server_num = [1,3,5]
-server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead"]
+server_num = [1,3,5,7]
+server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead","g","gold"]
 
 job_num = [0,1,2,3,4,5,6,7,8,9,10,20,22,24]
 # job_num = [9] #デバッグ用、普段はコメントアウト
@@ -38,7 +38,10 @@ for jn in job_num:
         r = []  # 保存先の行
 
         for pg in range(1,11):
-            url = 'https://members.redsonline.jp/game_info/community/ranking/ranking.asp?page='+ str(pg) +'&world=' +str(sn) +'&job=' +str(jn) +'&Page_Size=100'
+            surl = sn
+            if sn == 7:
+                surl = 25
+            url = 'https://members.redsonline.jp/game_info/community/ranking/ranking.asp?page='+ str(pg) +'&world=' +str(surl) +'&job=' +str(jn) +'&Page_Size=100'
             response = requests.get(url, headers=headers_dic)
             # print(response.raise_for_status())
             html_ranking = response.content

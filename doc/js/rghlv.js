@@ -1,4 +1,4 @@
-const server_name = ["strasserad", "vaultish", "bridgehead"];
+const server_name = ["strasserad", "vaultish", "bridgehead","gold"];
 
 //CSVファイルを読み込む
 function getCSV(date1, date2, server) {
