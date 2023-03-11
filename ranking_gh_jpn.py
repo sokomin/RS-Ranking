@@ -20,6 +20,12 @@ for sn in server_num:
         print("gh-rank:" + str(jn))
         mat = []
         r = []
+        # ファイルの存在チェック（何度も取得しないように）
+        t_server = str(today_str) + '_' + str(server_name[sn]) + '_' + str(jn)
+        out_file_name = const_dir + t_server + ".csv"
+        if os.path.exists(out_file_name):
+            print("File exist...")
+            continue
 
         surl = sn
         if sn == 7:
@@ -49,12 +55,7 @@ for sn in server_num:
             mat.append(r)
 
         # 出力
-        # for r in mat:
-        #     print(','.join(r))  # カンマ（,）で列を結合して表示
-
-        t_server = str(today_str) + '_' + str(server_name[sn]) + '_' + str(jn)
-
-        with open(const_dir + t_server + ".csv", "w", encoding='utf-8') as f:
+        with open(out_file_name, "w", encoding='utf-8') as f:
             for r in mat:
                 f.write(','.join(r))
                 f.write('\n')

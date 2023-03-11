@@ -36,6 +36,12 @@ for jn in job_num:
         print("server:" + str(server_name[sn]))
         mat = []  # 保存先の行列
         r = []  # 保存先の行
+        # ファイルの存在チェック（何度も取得しないように）
+        t_server = str(today_str) + '_' + str(server_name[sn]) + '_' + str(jn)
+        out_file_name = 'out/jpn_lv/' + t_server + '.csv'
+        if os.path.exists(out_file_name):
+            print("File exist...")
+            continue
 
         for pg in range(1,11):
             surl = sn
@@ -66,7 +72,7 @@ for jn in job_num:
 
         t_server = str(today_str) + '_' + str(server_name[sn]) + '_' + str(jn)
 
-        with open('out/jpn_lv/' + t_server + ".csv", "w", encoding='utf-8') as f:
+        with open(out_file_name, "w", encoding='utf-8') as f:
             for r in mat:
                 f.write(','.join(r))
                 f.write('\n')
