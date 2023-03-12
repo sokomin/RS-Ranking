@@ -38,7 +38,9 @@ for sn in server_num:
             if sn != 1:
                 continue
         response = requests.get(url)
-        html_ranking = response.content
+        # response.encoding = response.apparent_encoding  # 文字化け回避用
+        response.encoding="shift-jis"
+        html_ranking = response.text
         soup = BeautifulSoup(html_ranking, 'html.parser', from_encoding="shift-jis")
         table = soup.find('table', class_='guild')
 
