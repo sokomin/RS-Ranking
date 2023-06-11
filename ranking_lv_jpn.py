@@ -50,8 +50,10 @@ for jn in job_num:
             url = 'https://members.redsonline.jp/game_info/community/ranking/ranking.asp?page='+ str(pg) +'&world=' +str(surl) +'&job=' +str(jn) +'&Page_Size=100'
             response = requests.get(url, headers=headers_dic)
             # response.encoding = response.apparent_encoding  # 文字化け回避用
-            response.encoding="shift-jis"
+            # response.encoding="shift-jis"
             # response.encoding="utf-8"
+            # 正解はcp932でした…
+            response.encoding="cp932"
             # response.apparent_encoding="shift-jis"
             # print(response.raise_for_status())
             html_ranking = response.text

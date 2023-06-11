@@ -39,7 +39,9 @@ for sn in server_num:
                 continue
         response = requests.get(url)
         # response.encoding = response.apparent_encoding  # 文字化け回避用
-        response.encoding="shift-jis"
+        # response.encoding="shift-jis"
+        # 正解はcp932でした…
+        response.encoding="cp932"
         html_ranking = response.text
         soup = BeautifulSoup(html_ranking, 'html.parser', from_encoding="shift-jis")
         table = soup.find('table', class_='guild')
