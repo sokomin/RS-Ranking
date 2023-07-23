@@ -24,6 +24,8 @@ headers_dic = {
 }
 headers_dic = {}
 
+# 金鯖初日にランキングを取る専用
+gold_ex = 26
 server_num = [1,3,5,7]
 server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead","g","gold"]
 
@@ -46,7 +48,7 @@ for jn in job_num:
         for pg in range(1,11):
             surl = sn
             if sn == 7:
-                surl = 25
+                surl = gold_ex
             url = 'https://members.redsonline.jp/game_info/community/ranking/ranking.asp?page='+ str(pg) +'&world=' +str(surl) +'&job=' +str(jn) +'&Page_Size=100'
             response = requests.get(url, headers=headers_dic)
             # response.encoding = response.apparent_encoding  # 文字化け回避用

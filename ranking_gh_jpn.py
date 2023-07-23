@@ -10,6 +10,9 @@ now = datetime.datetime.now()
 today_str = now.strftime("%Y%m%d")
 const_dir = 'out/jpn_gh/'
 Path(const_dir).mkdir(parents=True, exist_ok=True)
+
+# 金鯖初日にランキングを取る専用
+gold_ex = 26
 server_num = [1,3,5,7]
 server_name = ["n", "strasserad", "b", "vaultish","w","bridgehead","g","gold"]
 job_num = [5,1,3]
@@ -29,7 +32,7 @@ for sn in server_num:
 
         surl = sn
         if sn == 7:
-            surl = 25
+            surl = gold_ex
         url = 'https://members.redsonline.jp/game_info/community/ranking/guild.asp?act=search&world=' +str(surl) +'&guildhallrank=' +str(jn)
         if jn == 5:
             url = 'https://members.redsonline.jp/game_info/community/ranking/guild.asp'
