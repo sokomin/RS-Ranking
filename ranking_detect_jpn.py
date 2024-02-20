@@ -17,17 +17,19 @@ Path(const_dir).mkdir(parents=True, exist_ok=True)
 for dr in range(0,6):
     today_str = str((now + datetime.timedelta(days=-dr)).strftime("%Y%m%d"))
     print(today_str)
-    for sn in range(0,4):
-        url = 'http://redstone.logickorea.co.kr/userboard/rankboard/default.aspx?boardType=2&server=' +str(sn) +'&character=&date=' + str(today_str)
+    for sn in range(1,4):
+        url = 'https://www.redstoneonline.jp/rank?t=2&s=WORLD0'+str(sn)+'&c=&d='
+        print(url)
         response = requests.get(url)
         response.raise_for_status()
         html_ranking = response.text
-
+        print(html_ranking)
         mat = []  # 保存先の行列
         soup = BeautifulSoup(html_ranking, 'html.parser')
         # FIXME 構造みて判断する
         table = soup.find('table')
-
+        # table = soup.find('table', {'data-v-d31fa134': ''})
+        print(table)
         # theadの解析
         r = [] 
         thead = table.find('thead') 
