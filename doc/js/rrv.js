@@ -19,6 +19,10 @@ function getCSV(date1, date2, server, job) {
             // data: request[i].params,
             type: 'GET',
             // dataType: 'json'
+        }).then(function (data) {
+            return data;
+        }, function () {
+            return "";
         }));
     }
     
@@ -27,16 +31,11 @@ function getCSV(date1, date2, server, job) {
     // $.whenのコンテキスト(applyの第一引数)はjQueryである必要があるので $ を渡す
     $.when.apply($, jqXHRList).done(function () {
         var csv_data = [];
-        var statuses = [];
-        var jqXHRResultList = [];
         // 結果は仮引数に可変長で入る **順番は保証されている**
         // 取り出すには arguments から取り出す
-        // さらにそれぞれには [data, textStatus, jqXHR] の配列になっている
+        // 欠損した比較先CSVは空文字として扱う
         for (var i = 0; i < arguments.length; i++) {
-            var result = arguments[i];
-            csv_data.push(result[0]);
-            statuses.push(result[1]);
-            jqXHRResultList.push(result[3]);
+            csv_data.push(arguments[i]);
         }
     
         console.log(csv_data);// => リクエストの配列と同じ順番で結果を参照できる
