@@ -1,30 +1,12 @@
 const server_name = ["strasserad","vaultish","bridgehead","gold"];
+const world_name = ["WORLD01","WORLD02","WORLD03","WORLD04"];
+const official_level_start = 20240219;
 
 //CSVファイルを読み込む
 function getCSV(date1, date2, server, job) {
-    url1 = "https://sokomin.github.io/RS-Ranking/out/jpn_lv/" + date1 + "_" + server_name[server] + "_" + job + ".csv";
-    url2 = "https://sokomin.github.io/RS-Ranking/out/jpn_lv/" + date2 + "_" + server_name[server] + "_" + job + ".csv";
-
-    var request = [
-        { url: url1 },
-        { url: url2 },
-        // { url: 'hoge04.json', params: { hoge: 615, huga: 2280 } }
-    ];
-    
     var jqXHRList = [];
-    
-    for (var i = 0; i < request.length; i++) {
-        jqXHRList.push($.ajax({ // $.ajaxの戻り値を配列に格納
-            url: request[i].url,
-            // data: request[i].params,
-            type: 'GET',
-            // dataType: 'json'
-        }).then(function (data) {
-            return data;
-        }, function () {
-            return "";
-        }));
-    }
+    jqXHRList.push(loadLevelRanking(date1, server, job));
+    jqXHRList.push(loadLevelRanking(date2, server, job));
     
     // $.when関数を利用する
     // $.whenは可変長引数を取るので、apllyメソッドを利用して配列で渡せるようにする
@@ -42,6 +24,73 @@ function getCSV(date1, date2, server, job) {
         convertCSVtoArray(csv_data);
 
     });
+}
+
+function loadLevelRanking(date, server, job) {
+    if (Number(job) === 0 && Number(date) >= official_level_start) {
+        return loadOfficialLevelRanking(date, server).then(function (data) {
+            if (data) {
+                return data;
+            }
+            return loadLegacyCsv(date, server, job);
+        });
+    }
+    return loadLegacyCsv(date, server, job);
+}
+
+function loadLegacyCsv(date, server, job) {
+    var url = "https://sokomin.github.io/RS-Ranking/out/jpn_lv/" + date + "_" + server_name[server] + "_" + job + ".csv";
+    return $.ajax({
+        url: url,
+        type: 'GET'
+    }).then(function (data) {
+        return data;
+    }, function () {
+        return "";
+    });
+}
+
+function loadOfficialLevelRanking(date, server) {
+    var url = "https://lnk-rs-web-files.s3.ap-northeast-1.amazonaws.com/meta/ranks/" + date + "/" + world_name[server] + "/rebirth.json";
+    return $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        mimeType: 'application/json; charset=utf-8'
+    }).then(function (data) {
+        return convertOfficialLevelRankingToCsv(data);
+    }, function () {
+        return "";
+    });
+}
+
+function convertOfficialLevelRankingToCsv(data) {
+    if (!Array.isArray(data) || data.length === 0) {
+        return "";
+    }
+    var rows = [["", "-", "職業", "キャラクター", "レベル", "転生回数"]];
+    for (var i = 0; i < data.length; i++) {
+        var rec = data[i] || {};
+        rows.push([
+            i + 1,
+            "-",
+            "",
+            rec.name || "",
+            rec.lev || "",
+            rec.rebirthcount || ""
+        ]);
+    }
+    return rows.map(function (row) {
+        return row.map(escapeCsvValue).join(",");
+    }).join("\n");
+}
+
+function escapeCsvValue(value) {
+    var text = String(value);
+    if (text.indexOf('"') >= 0 || text.indexOf(",") >= 0 || text.indexOf("\n") >= 0 || text.indexOf("\r") >= 0) {
+        return '"' + text.replace(/"/g, '""') + '"';
+    }
+    return text;
 }
 
 var obj_format = {0: "rank", 1: "img",2: "job", 3:"name", 4:"lv", 5:"returner"};
