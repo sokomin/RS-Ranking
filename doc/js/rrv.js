@@ -1,6 +1,7 @@
 const server_name = ["strasserad","vaultish","bridgehead","gold"];
 const world_name = ["WORLD01","WORLD02","WORLD03","WORLD04"];
 const official_level_start = 20240219;
+const ranking_request_timeout = 5000;
 
 //CSVファイルを読み込む
 function getCSV(date1, date2, server, job) {
@@ -28,11 +29,11 @@ function getCSV(date1, date2, server, job) {
 
 function loadLevelRanking(date, server, job) {
     if (Number(job) === 0 && Number(date) >= official_level_start) {
-        return loadOfficialLevelRanking(date, server).then(function (data) {
-            if (data) {
+        return loadLegacyCsv(date, server, job).then(function (data) {
+            if (hasRankingData(data)) {
                 return data;
             }
-            return loadLegacyCsv(date, server, job);
+            return loadOfficialLevelRanking(date, server);
         });
     }
     return loadLegacyCsv(date, server, job);
@@ -42,7 +43,8 @@ function loadLegacyCsv(date, server, job) {
     var url = "https://sokomin.github.io/RS-Ranking/out/jpn_lv/" + date + "_" + server_name[server] + "_" + job + ".csv";
     return $.ajax({
         url: url,
-        type: 'GET'
+        type: 'GET',
+        timeout: ranking_request_timeout
     }).then(function (data) {
         return data;
     }, function () {
@@ -56,12 +58,17 @@ function loadOfficialLevelRanking(date, server) {
         url: url,
         type: 'GET',
         dataType: 'json',
-        mimeType: 'application/json; charset=utf-8'
+        mimeType: 'application/json; charset=utf-8',
+        timeout: ranking_request_timeout
     }).then(function (data) {
         return convertOfficialLevelRankingToCsv(data);
     }, function () {
         return "";
     });
+}
+
+function hasRankingData(data) {
+    return typeof data === "string" && data.replace(/^\s+|\s+$/g, "") !== "";
 }
 
 function convertOfficialLevelRankingToCsv(data) {
