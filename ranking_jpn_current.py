@@ -27,7 +27,7 @@ def ymd_range(start, end):
 def fetch_json(session, date, world, name):
     url = f"{BASE_URL}/meta/ranks/{date}/{world}/{name}.json"
     res = session.get(url, timeout=20)
-    if res.status_code == 404:
+    if res.status_code in (403, 404):
         return []
     res.raise_for_status()
     return json.loads(res.content.decode("utf-8"))
@@ -41,8 +41,12 @@ def write_csv(path, rows):
 
 
 def write_level(session, date, world, server):
+    data = fetch_json(session, date, world, "rebirth")
+    if not data:
+        return None, 0
+
     rows = [["", "-", "職業", "キャラクター", "レベル", "転生回数"]]
-    for rank, rec in enumerate(fetch_json(session, date, world, "rebirth"), 1):
+    for rank, rec in enumerate(data, 1):
         rows.append([
             rank,
             "-",
@@ -60,9 +64,14 @@ def write_gh(session, date):
     castle_by_server = {}
     for world, server in SERVERS:
         castle_by_server[server] = fetch_json(session, date, world, "castle")
+    if not any(castle_by_server.values()):
+        return 0
 
     total = 0
     for server, data in castle_by_server.items():
+        if not data:
+            continue
+
         rows_3 = []
         rows_1 = []
         for rank, rec in enumerate(data, 1):
@@ -114,7 +123,10 @@ def main():
         for date in ymd_range(args.start, args.end):
             for world, server in SERVERS:
                 path, count = write_level(session, date, world, server)
-                print(f"level {date} {server}: {count} rows -> {path}")
+                if path:
+                    print(f"level {date} {server}: {count} rows -> {path}")
+                else:
+                    print(f"level {date} {server}: skipped")
             gh_count = write_gh(session, date)
             print(f"gh {date}: {gh_count} rows")
 
