@@ -24,6 +24,32 @@ def ymd_range(start, end):
         cur += dt.timedelta(days=1)
 
 
+def parse_ymd(value):
+    return dt.datetime.strptime(value, "%Y%m%d").date()
+
+
+def existing_dates():
+    dates = []
+    for directory in (Path("out/jpn_lv"), Path("out/jpn_gh")):
+        if not directory.exists():
+            continue
+        for path in directory.iterdir():
+            prefix = path.name[:8]
+            if len(prefix) == 8 and prefix.isdigit():
+                dates.append(parse_ymd(prefix))
+    return dates
+
+
+def resolve_range(args):
+    end = parse_ymd(args.end) if args.end else dt.date.today() - dt.timedelta(days=1)
+    if args.start:
+        start = parse_ymd(args.start)
+    else:
+        dates = existing_dates()
+        start = max(dates) + dt.timedelta(days=1) if dates else end
+    return start, end
+
+
 def fetch_json(session, date, world, name):
     url = f"{BASE_URL}/meta/ranks/{date}/{world}/{name}.json"
     res = session.get(url, timeout=20)
@@ -115,12 +141,18 @@ def write_gh(session, date):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--start", required=True)
-    parser.add_argument("--end", required=True)
+    parser.add_argument("--start")
+    parser.add_argument("--end")
     args = parser.parse_args()
 
+    start, end = resolve_range(args)
+    if start > end:
+        print(f"up to date: latest local data is {start - dt.timedelta(days=1):%Y%m%d}")
+        return
+
     with requests.Session() as session:
-        for date in ymd_range(args.start, args.end):
+        print(f"fetch range: {start:%Y%m%d}..{end:%Y%m%d}")
+        for date in ymd_range(start.strftime("%Y%m%d"), end.strftime("%Y%m%d")):
             for world, server in SERVERS:
                 path, count = write_level(session, date, world, server)
                 if path:
