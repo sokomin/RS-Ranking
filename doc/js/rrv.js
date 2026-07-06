@@ -2,8 +2,8 @@ const server_name = ["strasserad","vaultish","bridgehead","gold"];
 
 //CSVファイルを読み込む
 function getCSV(date1, date2, server, job) {
-    url1 = "https://sokomin.github.io/RS-Ranking/out/jpn_lv/" + date1 + "_" + server_name[server] + "_" + job + ".csv";
-    url2 = "https://sokomin.github.io/RS-Ranking/out/jpn_lv/" + date2 + "_" + server_name[server] + "_" + job + ".csv";
+    url1 = "https://cdn.jsdelivr.net/gh/sokomin/RS-Ranking@main/out/jpn_lv/" + date1 + "_" + server_name[server] + "_" + job + ".csv";
+    url2 = "https://cdn.jsdelivr.net/gh/sokomin/RS-Ranking@main/out/jpn_lv/" + date2 + "_" + server_name[server] + "_" + job + ".csv";
 
     var request = [
         { url: url1 },
