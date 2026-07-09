@@ -3,8 +3,8 @@ import csv
 import datetime as dt
 import json
 from pathlib import Path
-
-import requests
+from urllib.error import HTTPError
+from urllib.request import urlopen
 
 
 BASE_URL = "https://lnk-rs-web-files.s3.ap-northeast-1.amazonaws.com"
@@ -50,24 +50,26 @@ def resolve_range(args):
     return start, end
 
 
-def fetch_json(session, date, world, name):
+def fetch_json(date, world, name):
     url = f"{BASE_URL}/meta/ranks/{date}/{world}/{name}.json"
-    res = session.get(url, timeout=20)
-    if res.status_code in (403, 404):
-        return []
-    res.raise_for_status()
-    return json.loads(res.content.decode("utf-8"))
+    try:
+        with urlopen(url, timeout=20) as res:
+            return json.loads(res.read().decode("utf-8"))
+    except HTTPError as exc:
+        if exc.code in (403, 404):
+            return []
+        raise
 
 
 def write_csv(path, rows):
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.writer(f, lineterminator="\n")
+        writer = csv.writer(f, lineterminator="\r\n")
         writer.writerows(rows)
 
 
-def write_level(session, date, world, server):
-    data = fetch_json(session, date, world, "rebirth")
+def write_level(date, world, server):
+    data = fetch_json(date, world, "rebirth")
     if not data:
         return None, 0
 
@@ -86,10 +88,10 @@ def write_level(session, date, world, server):
     return path, max(0, len(rows) - 1)
 
 
-def write_gh(session, date):
+def write_gh(date):
     castle_by_server = {}
     for world, server in SERVERS:
-        castle_by_server[server] = fetch_json(session, date, world, "castle")
+        castle_by_server[server] = fetch_json(date, world, "castle")
     if not any(castle_by_server.values()):
         return 0
 
@@ -150,17 +152,16 @@ def main():
         print(f"up to date: latest local data is {start - dt.timedelta(days=1):%Y%m%d}")
         return
 
-    with requests.Session() as session:
-        print(f"fetch range: {start:%Y%m%d}..{end:%Y%m%d}")
-        for date in ymd_range(start.strftime("%Y%m%d"), end.strftime("%Y%m%d")):
-            for world, server in SERVERS:
-                path, count = write_level(session, date, world, server)
-                if path:
-                    print(f"level {date} {server}: {count} rows -> {path}")
-                else:
-                    print(f"level {date} {server}: skipped")
-            gh_count = write_gh(session, date)
-            print(f"gh {date}: {gh_count} rows")
+    print(f"fetch range: {start:%Y%m%d}..{end:%Y%m%d}")
+    for date in ymd_range(start.strftime("%Y%m%d"), end.strftime("%Y%m%d")):
+        for world, server in SERVERS:
+            path, count = write_level(date, world, server)
+            if path:
+                print(f"level {date} {server}: {count} rows -> {path}")
+            else:
+                print(f"level {date} {server}: skipped")
+        gh_count = write_gh(date)
+        print(f"gh {date}: {gh_count} rows")
 
 
 if __name__ == "__main__":
